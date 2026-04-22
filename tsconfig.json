@@ -21,10 +21,15 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
     "allowImportingTsExtensions": true,
-    "noEmit": true
+    "noEmit": true,
+    "allowJs": true,
+    "strict": false,
+    "esModuleInterop": true
   },
   "include": [
     "next-env.d.ts",

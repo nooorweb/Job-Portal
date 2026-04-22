@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { ORGANIZATIONS } from "@/constants/data";
 
@@ -8,7 +9,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-10">
         <div className="col-span-2 md:col-span-1">
           <Link href="/" className="flex items-center gap-2 mb-3">
-            <span aria-hidden className="grid place-items-center w-9 h-9 rounded-lg bg-[var(--color-accent-primary)] text-white">🇵🇰</span>
+            <span aria-hidden className="grid place-items-center w-9 h-9 rounded-lg bg-[var(--color-accent-primary)] text-white">PK</span>
             <span className="font-bold text-xl text-[var(--color-accent-primary)]">PakCareers</span>
           </Link>
           <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">
@@ -18,18 +19,18 @@ export default function Footer() {
         <div>
           <h4 className="text-xs uppercase tracking-widest text-[var(--color-text-muted)] mb-3 font-semibold">Quick Links</h4>
           <ul className="space-y-2 text-sm">
-            <li><Link href="/" className="hover:text-[var(--color-accent-primary)]">Browse Organizations</Link></li>
-            <li><Link href="/" className="hover:text-[var(--color-accent-primary)]">Latest Posts</Link></li>
-            <li><Link href="/" className="hover:text-[var(--color-accent-primary)]">Practice Quizzes</Link></li>
-            <li><Link href="/" className="hover:text-[var(--color-accent-primary)]">Help Center</Link></li>
+            <li><Link href="/organizations" className="hover:text-[var(--color-accent-primary)]">Browse Organizations</Link></li>
+            <li><Link href="/learn" className="hover:text-[var(--color-accent-primary)]">Prep Guides</Link></li>
+            <li><Link href="/learn/how-to-prepare-fpsc" className="hover:text-[var(--color-accent-primary)]">FPSC Guide</Link></li>
+            <li><Link href="/learn/fia-asi-test-strategy" className="hover:text-[var(--color-accent-primary)]">FIA Strategy</Link></li>
           </ul>
         </div>
         <div>
           <h4 className="text-xs uppercase tracking-widest text-[var(--color-text-muted)] mb-3 font-semibold">Top Organizations</h4>
           <ul className="space-y-2 text-sm">
-            {ORGANIZATIONS.slice(0, 4).map((o) => (
-              <li key={o.slug}>
-                <Link href={`/organizations/${o.slug}`} className="hover:text-[var(--color-accent-primary)]">{o.shortName}</Link>
+            {ORGANIZATIONS.slice(0, 4).map((org) => (
+              <li key={org.slug}>
+                <Link href={`/organizations/${org.slug}`} className="hover:text-[var(--color-accent-primary)]">{org.shortName}</Link>
               </li>
             ))}
           </ul>
@@ -37,7 +38,7 @@ export default function Footer() {
         <div>
           <h4 className="text-xs uppercase tracking-widest text-[var(--color-text-muted)] mb-3 font-semibold">Newsletter</h4>
           <p className="text-sm text-[var(--color-text-muted)] mb-3">Weekly job alerts in your inbox.</p>
-          <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
+          <form className="flex gap-2" onSubmit={(event) => event.preventDefault()}>
             <input className="pk-input !py-2 !text-sm" placeholder="you@email.pk" />
             <button className="pk-btn pk-btn-green !py-2">Join</button>
           </form>
@@ -45,7 +46,7 @@ export default function Footer() {
       </div>
       <div className="border-t border-[var(--color-border-light)]">
         <p className="max-w-7xl mx-auto px-6 py-5 text-xs text-[var(--color-text-muted)] text-center">
-          © 2026 PakCareers. Independent portal — not affiliated with the Government of Pakistan.
+          © 2026 PakCareers. Independent portal, not affiliated with the Government of Pakistan.
         </p>
       </div>
     </footer>

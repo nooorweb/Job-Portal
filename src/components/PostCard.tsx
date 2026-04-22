@@ -1,24 +1,25 @@
 import Link from "next/link";
 import { Users, GraduationCap, Cake, Clock, ArrowRight } from "lucide-react";
 import type { Job } from "@/constants/data";
-import { formatDate, daysUntil } from "@/lib/format";
+import { daysUntil } from "@/lib/format";
+import DeadlineChip from "./DeadlineChip";
 
 const STATUS = {
-  open: { label: "OPEN", className: "pk-pill-green", dot: "bg-[var(--color-status-open)]" },
-  "closing-soon": { label: "CLOSING SOON", className: "pk-pill-orange", dot: "bg-[var(--color-status-closing)]" },
-  closed: { label: "CLOSED", className: "pk-pill !bg-red-50 !text-[var(--color-status-closed)] !border-red-200", dot: "bg-[var(--color-status-closed)]" },
+  open: { label: "Open", className: "pk-pill-green", dot: "bg-[var(--color-status-open)]" },
+  "closing-soon": { label: "Closing Soon", className: "pk-pill-orange", dot: "bg-[var(--color-status-closing)]" },
+  closed: { label: "Closed", className: "pk-pill !bg-red-50 !text-[var(--color-status-closed)] !border-red-200", dot: "bg-[var(--color-status-closed)]" },
 } as const;
 
 export default function PostCard({ orgSlug, job }: { orgSlug: string; job: Job }) {
-  const s = STATUS[job.status];
+  const status = STATUS[job.status];
   const days = daysUntil(job.applicationEnd);
   const urgent = days <= 7 && days >= 0;
 
   return (
     <article className="pk-card pk-card-hoverable p-6 flex flex-col gap-4 border-l-[3px] !border-l-transparent hover:!border-l-[var(--color-accent-primary)]">
       <div className="flex items-center justify-between">
-        <span className={`pk-pill ${s.className} !text-[11px] font-semibold tracking-wide`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${s.dot}`} /> {s.label}
+        <span className={`pk-pill ${status.className} !text-[11px] font-semibold tracking-wide`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} /> {status.label}
         </span>
         <span className="pk-pill pk-pill-gold !text-[11px] font-semibold">{job.bpsGrade}</span>
       </div>
@@ -40,15 +41,12 @@ export default function PostCard({ orgSlug, job }: { orgSlug: string; job: Job }
 
       <div className={`flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-lg ${urgent ? "bg-red-50 text-[var(--color-status-closed)]" : "bg-[var(--color-bg-section)] text-[var(--color-text-body)]"}`}>
         <Clock className="w-4 h-4" />
-        Apply by {formatDate(job.applicationEnd)}
+        <DeadlineChip deadline={job.applicationEnd} />
         {days >= 0 && <span className="ml-auto text-xs font-semibold">{days}d left</span>}
       </div>
 
-      <Link
-        href={`/organizations/${orgSlug}/${job.slug}`}
-        className="pk-btn pk-btn-green w-full mt-1"
-      >
-        View Details & Syllabus <ArrowRight className="w-4 h-4" />
+      <Link href={`/organizations/${orgSlug}/${job.slug}`} className="pk-btn pk-btn-green w-full mt-1">
+        View Details and Syllabus <ArrowRight className="w-4 h-4" />
       </Link>
     </article>
   );

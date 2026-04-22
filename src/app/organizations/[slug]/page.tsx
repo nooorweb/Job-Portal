@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, Star, Globe, Calendar } from "lucide-react";
+import { Calendar, ChevronRight, Globe, Star } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PostCard from "@/components/PostCard";
@@ -8,7 +8,7 @@ import { getOrganization, ORGANIZATIONS } from "@/constants/data";
 import { formatMonth } from "@/lib/format";
 
 export function generateStaticParams() {
-  return ORGANIZATIONS.map((o) => ({ slug: o.slug }));
+  return ORGANIZATIONS.map((org) => ({ slug: org.slug }));
 }
 
 export default async function OrganizationPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -20,17 +20,17 @@ export default async function OrganizationPage({ params }: { params: Promise<{ s
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      {/* Hero header */}
       <section className="relative">
         <div className="relative h-64 md:h-80 overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={org.coverImage} alt="" className="w-full h-full object-cover" />
+          <img src={org.coverImage} alt={org.name} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
         </div>
 
         <div className="max-w-7xl mx-auto px-6">
           <nav aria-label="Breadcrumb" className="text-sm text-[var(--color-text-muted)] py-4 flex items-center gap-1">
             <Link href="/" className="hover:text-[var(--color-accent-primary)]">Home</Link>
+            <ChevronRight className="w-3.5 h-3.5" />
+            <Link href="/organizations" className="hover:text-[var(--color-accent-primary)]">Organizations</Link>
             <ChevronRight className="w-3.5 h-3.5" />
             <span className="text-[var(--color-text-heading)] font-medium">{org.shortName}</span>
           </nav>
@@ -59,11 +59,10 @@ export default async function OrganizationPage({ params }: { params: Promise<{ s
         </div>
       </section>
 
-      {/* Posts grid */}
       <section className="max-w-7xl mx-auto px-6 pb-12 w-full">
         <div className="flex items-end justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-[var(--color-text-heading)]">Active Posts</h2>
+            <h2 className="text-2xl font-bold text-[var(--color-text-heading)]">Available Posts</h2>
             <p className="text-sm text-[var(--color-text-muted)]">{org.jobs.length} positions currently advertised</p>
           </div>
         </div>

@@ -10,7 +10,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "PakCareers — Pakistan Government Jobs Portal",
+  title: "PakCareers - Pakistan Government Jobs Portal",
   description: "Browse FPSC, KPPSC, FIA, Pakistan Army, Police and more. Apply, study syllabus, and prepare with practice quizzes.",
 };
 

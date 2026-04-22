@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  
+  --color-brand-primary: #0F4C3A;
+  --color-brand-primary-light: #186B52;
+  
+  --color-bg-base: var(--background);
+  --color-surface-base: var(--surface);
+  --color-text-main: var(--foreground);
+  --color-text-muted: var(--text-secondary);
+}
+
+:root {
+  --background: #F8FAFC;
+  --surface: #FFFFFF;
+  --foreground: #0F172A;
+  --text-secondary: #64748B;
+  --accent-blue: #2563EB;
+  --border-subtle: #E2E8F0;
+}
+
+.dark {
+  --background: #0F172A;
+  --surface: #1E293B;
+  --foreground: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --border-subtle: #334155;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@layer components {
+  .portal-card {
+    @apply bg-[var(--surface)] border border-[var(--border-subtle)] rounded-lg shadow-sm transition-all duration-200 hover:shadow-md;
+  }
+  
+  .portal-btn-primary {
+    @apply bg-brand-primary text-white font-bold py-2 px-6 rounded-md hover:bg-brand-primary-light transition-colors duration-200;
+  }
+  
+  .portal-btn-secondary {
+    @apply border-2 border-brand-primary text-brand-primary font-bold py-2 px-6 rounded-md hover:bg-brand-primary/5 transition-colors duration-200;
+  }
+
+  .quiz-option {
+    @apply border-2 border-[var(--border-subtle)] p-4 rounded-xl cursor-pointer transition-all hover:bg-brand-primary/5;
+  }
+}
+
+/* Print Styles */
+@media print {
+  nav, footer, .no-print, button, .dark-toggle {
+    display: none !important;
+  }
+  
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  .portal-card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+    margin-bottom: 20px;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+}

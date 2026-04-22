@@ -1,0 +1,244 @@
+/jobs                  → All jobs listing page
+/jobs/[slug]           → Individual job detail page
+Each job has:
+
+Title, Company, Salary, Type, Location
+Requirements, Responsibilities, Perks
+Links to its own Syllabus page
+Links to its own Quiz page
+
+
+2. 📚 Syllabus (Structured Learning Path — NOT a blog)
+This is not an article. It's a week-by-week curriculum tied to a specific job. Think of it like a university course outline or a Udemy course curriculum — structured, visual, interactive.
+/jobs/[slug]/syllabus  → The learning path for that job role
+Each Syllabus page has:
+
+Weeks/Modules (accordion or timeline)
+Topics per week
+Resource links (external docs, videos)
+Progress tracker (localStorage)
+"Ready to take the quiz?" CTA at the bottom
+
+
+3. 📰 Content Pages — "Article-Type but NOT WordPress"
+This is the most important clarification. Here's exactly what you mean:
+❌ WordPress Style✅ Your StyleBlog posts with categories/tagsStandalone in-depth guidesAuthor bio, comments sectionClean reading experience, no clutterSidebar widgets, adsFull-width, focused reading/blog/post-title pattern/learn/topic-name or /guide/topic-nameCMS-managed HTML blobsMDX files (Markdown + React components)Generic post templateEach guide has its own layout feel
+What it actually is: Think Stripe Docs, Vercel Guides, Josh Comeau's blog, or The Pragmatic Engineer — long-form, beautifully typeset, standalone knowledge pages. Written in MDX (.mdx files), rendered as Next.js pages.
+/learn/[slug]          → A deep-dive guide (e.g., "What is React?")
+/guides/[slug]         → A career guide (e.g., "How to crack a frontend interview")
+Each Content Page has:
+
+Clean reading layout (max 680px width, centered)
+Table of contents (sticky sidebar, auto-generated from headings)
+Estimated read time
+Related jobs CTA at the bottom
+Custom MDX components — callout boxes, code blocks, comparison tables, tip/warning boxes — not WordPress shortcodes
+
+
+🗂️ COMPLETE SITE STRUCTURE (Next.js App Router)
+app/
+├── page.tsx                          → Landing Page (Hero + Job grid + Featured guides)
+│
+├── jobs/
+│   ├── page.tsx                      → All Jobs listing
+│   └── [slug]/
+│       ├── page.tsx                  → Job Detail (Overview tab)
+│       ├── syllabus/
+│       │   └── page.tsx              → Syllabus (Week timeline)
+│       └── quiz/
+│           └── page.tsx              → Quiz (Interactive test)
+│
+├── learn/
+│   ├── page.tsx                      → All Guides/Content index
+│   └── [slug]/
+│       └── page.tsx                  → Individual guide (MDX rendered)
+│
+├── categories/
+│   └── [category]/
+│       └── page.tsx                  → Jobs filtered by category
+│
+└── layout.tsx                        → Root layout (Navbar + Footer)
+
+📦 DATA ARCHITECTURE — Where Content Lives
+/content
+  /jobs
+    frontend-developer.ts             ← TypeScript object (job data)
+    ui-ux-designer.ts
+    data-analyst.ts
+
+  /guides                             ← MDX files (article-type content)
+    what-is-react.mdx
+    how-to-get-a-frontend-job.mdx
+    ui-ux-career-roadmap.mdx
+
+/src
+  /lib
+    getAllJobs.ts                      ← reads /content/jobs/*.ts
+    getAllGuides.ts                    ← reads /content/guides/*.mdx (via Contentlayer or next-mdx-remote)
+    getJobBySlug.ts
+    getGuideBySlug.ts
+Job Data Shape (TypeScript)
+ts// /content/jobs/frontend-developer.ts
+
+export const job = {
+  slug: "frontend-developer",
+  title: "Frontend Developer",
+  company: "TechNova Inc.",
+  salary: "$1,200 – $2,000/mo",
+  type: "Full-Time",           // Full-Time | Part-Time | Internship | Contract
+  level: "Mid-Level",          // Entry | Mid | Senior | Lead
+  category: "Engineering",
+  location: "Remote / Lahore",
+  tags: ["React", "Tailwind", "TypeScript"],
+  featured: true,
+  postedDate: "2025-04-10",
+  deadline: "2025-05-10",
+  overview: `...`,             // Long markdown string
+  responsibilities: [...],
+  requirements: [...],
+  perks: [...],
+  relatedGuides: ["what-is-react", "how-to-get-a-frontend-job"],  // ← links to /learn pages
+  syllabus: [
+    {
+      week: 1,
+      title: "HTML & CSS Foundations",
+      duration: "8 hrs",
+      topics: ["Semantic HTML5", "CSS Grid & Flexbox", "Responsive Design"],
+      resources: [
+        { label: "MDN HTML Guide", url: "https://developer.mozilla.org" }
+      ]
+    },
+    // ... more weeks
+  ],
+  quiz: [
+    {
+      id: "q1",
+      question: "Which React hook is used for side effects?",
+      options: ["useState", "useEffect", "useMemo", "useCallback"],
+      correct: 1,
+      explanation: "useEffect runs after render and handles side effects."
+    },
+    // ... 9 more
+  ]
+}
+MDX Guide Frontmatter Shape
+mdx---
+title: "What is React? A Complete Beginner's Guide"
+slug: "what-is-react"
+description: "Understand React from scratch — components, JSX, state, and hooks explained simply."
+readTime: "12 min read"
+publishedAt: "2025-04-01"
+category: "Engineering"
+relatedJobs: ["frontend-developer"]     ← links back to jobs
+coverImage: "/images/react-guide.png"
+---
+
+## Introduction
+
+React is a JavaScript library...
+
+<Callout type="tip">
+  You don't need to know everything — just the fundamentals first.
+</Callout>
+
+## What is a Component?
+...
+
+🧩 KEY PAGES — Detailed Layout Breakdown
+🔷 Landing Page (/)
+[ NAVBAR ]
+[ HERO ] — Headline + search bar + animated stat counters
+[ FEATURED JOBS ] — 3 horizontal featured job cards
+[ BROWSE BY CATEGORY ] — Icon grid: Engineering, Design, Marketing...
+[ LATEST GUIDES ] — 3 content cards (article-type, clean minimal)
+[ HOW IT WORKS ] — 3-step explainer (Browse → Learn → Apply)
+[ FOOTER ]
+
+🔷 Job Detail Page (/jobs/[slug])
+[ BREADCRUMB: Home > Jobs > Frontend Developer ]
+[ JOB HEADER PANEL ]
+  — Logo, Title, Company, Location, Salary, Tags, Deadline
+  — "Apply Now" CTA button
+
+[ STICKY TAB BAR ]
+  Overview | Syllabus | Quiz
+
+[ OVERVIEW CONTENT ]
+  Left (70%): About the Role, Responsibilities, Requirements, Perks
+  Right (30%): Quick Info Card + Apply Button + Related Guides (cards linking to /learn/[slug])
+
+🔷 Syllabus Page (/jobs/[slug]/syllabus)
+[ HEADER: "Learning Path — Frontend Developer" ]
+[ PROGRESS BAR: "Week 2 of 8 Complete" ]
+
+[ TIMELINE — vertical stepper ]
+  ┌─ Week 1: HTML & CSS ──────────────────────┐
+  │  Topics: Semantic HTML, Flexbox, Grid      │
+  │  Duration: 8 hours                         │
+  │  [ Resource Links ]                        │
+  │  [ Mark Complete ✓ ]                       │
+  └────────────────────────────────────────────┘
+  │ (connector line)
+  ┌─ Week 2: JavaScript Fundamentals ─────────┐
+  ...
+
+[ BOTTOM CTA: "All done? Take the Quiz →" ]
+
+🔷 Quiz Page (/jobs/[slug]/quiz)
+[ INTRO SCREEN ]
+  Title, rules, timer info, Start button
+
+[ QUESTION SCREEN ]
+  — Sticky top bar: Progress + Timer
+  — Question card with 4 option cards
+  — Previous / Next navigation
+  — Question dot palette (sidebar)
+
+[ RESULT SCREEN ]
+  — Animated score ring
+  — Grade badge
+  — Review all answers (green = correct, red = wrong + explanation)
+  — "Apply for this Job" CTA
+
+🔷 Guide/Content Page (/learn/[slug])
+This is the "article-type but NOT WordPress" page.
+[ CLEAN HEADER ]
+  — Title (large, display font)
+  — Description subtitle
+  — Read time + Published date
+  — Category tag
+
+[ READING LAYOUT — max-width 680px centered ]
+  Left: Article body (MDX rendered)
+  Right (sticky): Table of Contents (auto from headings)
+
+[ MDX CUSTOM COMPONENTS — inline in content ]
+  <Callout type="tip|warning|info"> — highlighted info boxes
+  <CodeBlock language="jsx">       — syntax-highlighted code
+  <ComparisonTable>                — vs table
+  <StepList>                       — numbered step cards
+  <ResourceCard>                   — link preview cards
+
+[ BOTTOM OF ARTICLE ]
+  — "Related Jobs" section → shows job cards for relatedJobs[]
+  — "More Guides" → 3 similar content cards
+
+⚙️ NEXT.JS SPECIFIC IMPLEMENTATION
+Rendering Strategy
+PageStrategyWhy/ LandingSSG (generateStaticParams)Static, fast/jobsSSGData from constants/jobs/[slug]SSGPre-render all job pages/jobs/[slug]/syllabusSSGPre-rendered/jobs/[slug]/quizCSR (client component)Timer + state/learn/[slug]SSGMDX pre-rendered
+MDX Setup
+Use next-mdx-remote or Contentlayer (recommended):
+bashnpm install contentlayer next-contentlayer date-fns
+Component Architecture
+"use client"  → Quiz page, bookmark toggle, progress tracker, filter bar
+"use server"  → Everything else (layouts, job cards, guide pages)
+Key Libraries
+bashnpm install next-mdx-remote       # MDX rendering
+npm install contentlayer          # Content SDK (optional but clean)
+npm install framer-motion         # Animations
+npm install lucide-react          # Icons
+npm install clsx tailwind-merge   # Class utilities
+npm install next-themes           # Dark/light mode
+
+🎯 THE KEY DIFFERENCE — Summary Table
+FeatureWordPress BlogYour SiteContent formatPHP template + DBMDX files + Next.jsJob dataPlugin/custom post typeTypeScript constantsSyllabusPage builder blocksTyped data structure + React UIQuizQuiz pluginCustom React state machineRouting/blog/post/jobs/[slug] · /learn/[slug]StylingTheme CSSTailwind + design systemPerformanceSlow, heavyStatic generation, sub-secondExtensibilityPlugin-dependentFull code control

@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
-import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 
-const syne = Syne({ variable: "--font-syne", subsets: ["latin"], display: "swap", weight: ["600", "700", "800"] });
-const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"], display: "swap" });
-const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], display: "swap" });
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
 
 export const metadata: Metadata = {
-  title: "JobForge — Find Work That Matches Your Skills",
-  description: "Browse curated jobs, study tailored syllabi, and prove your skills with role-specific quizzes.",
+  title: "PakCareers — Pakistan Government Jobs Portal",
+  description: "Browse FPSC, KPPSC, FIA, Pakistan Army, Police and more. Apply, study syllabus, and prepare with practice quizzes.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${syne.variable} ${dmSans.variable} ${jetbrains.variable}`}>
-        {children}
-      </body>
+      <body className={poppins.variable}>{children}</body>
     </html>
   );
 }

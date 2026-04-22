@@ -1,58 +1,52 @@
 "use client";
 import Link from "next/link";
-import { Github, Linkedin, Twitter, Hexagon } from "lucide-react";
+import { ORGANIZATIONS } from "@/constants/data";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[var(--color-border-subtle)] mt-24">
-      <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-12">
-        <div>
-          <Link href="/" className="flex items-center gap-2 mb-4">
-            <span className="grid place-items-center w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--color-accent-primary)] to-[var(--color-accent-secondary)]">
-              <Hexagon className="w-5 h-5 text-[#0A0A0F]" strokeWidth={2.5} />
-            </span>
-            <span className="jf-display text-xl">JobForge</span>
+    <footer className="border-t border-[var(--color-border-light)] bg-[var(--color-bg-section)] mt-24">
+      <div className="max-w-7xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-10">
+        <div className="col-span-2 md:col-span-1">
+          <Link href="/" className="flex items-center gap-2 mb-3">
+            <span aria-hidden className="grid place-items-center w-9 h-9 rounded-lg bg-[var(--color-accent-primary)] text-white">🇵🇰</span>
+            <span className="font-bold text-xl text-[var(--color-accent-primary)]">PakCareers</span>
           </Link>
-          <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
-            Curated jobs, tailored learning paths, and skill-proving quizzes — all in one place.
+          <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">
+            Pakistan&apos;s comprehensive guide to government jobs, with study syllabi and practice quizzes.
           </p>
         </div>
         <div>
-          <h4 className="text-xs uppercase tracking-widest text-[var(--color-text-muted)] mb-4">Quick Links</h4>
-          <ul className="space-y-3 text-sm">
-            <li><Link href="/" className="hover:text-[var(--color-accent-primary)]">Browse Jobs</Link></li>
-            <li><Link href="/" className="hover:text-[var(--color-accent-primary)]">Companies</Link></li>
-            <li><Link href="/" className="hover:text-[var(--color-accent-primary)]">Pricing</Link></li>
-            <li><Link href="/" className="hover:text-[var(--color-accent-primary)]">FAQ</Link></li>
+          <h4 className="text-xs uppercase tracking-widest text-[var(--color-text-muted)] mb-3 font-semibold">Quick Links</h4>
+          <ul className="space-y-2 text-sm">
+            <li><Link href="/" className="hover:text-[var(--color-accent-primary)]">Browse Organizations</Link></li>
+            <li><Link href="/" className="hover:text-[var(--color-accent-primary)]">Latest Posts</Link></li>
+            <li><Link href="/" className="hover:text-[var(--color-accent-primary)]">Practice Quizzes</Link></li>
+            <li><Link href="/" className="hover:text-[var(--color-accent-primary)]">Help Center</Link></li>
           </ul>
         </div>
         <div>
-          <h4 className="text-xs uppercase tracking-widest text-[var(--color-text-muted)] mb-4">Categories</h4>
-          <ul className="space-y-3 text-sm">
-            <li>Engineering</li>
-            <li>Design</li>
-            <li>Marketing</li>
-            <li>Data & Product</li>
+          <h4 className="text-xs uppercase tracking-widest text-[var(--color-text-muted)] mb-3 font-semibold">Top Organizations</h4>
+          <ul className="space-y-2 text-sm">
+            {ORGANIZATIONS.slice(0, 4).map((o) => (
+              <li key={o.slug}>
+                <Link href={`/organizations/${o.slug}`} className="hover:text-[var(--color-accent-primary)]">{o.shortName}</Link>
+              </li>
+            ))}
           </ul>
         </div>
         <div>
-          <h4 className="text-xs uppercase tracking-widest text-[var(--color-text-muted)] mb-4">Newsletter</h4>
-          <p className="text-sm text-[var(--color-text-secondary)] mb-3">Weekly hand-picked jobs in your inbox.</p>
+          <h4 className="text-xs uppercase tracking-widest text-[var(--color-text-muted)] mb-3 font-semibold">Newsletter</h4>
+          <p className="text-sm text-[var(--color-text-muted)] mb-3">Weekly job alerts in your inbox.</p>
           <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
-            <input className="jf-input !py-2 !text-sm" placeholder="you@work.com" />
-            <button className="jf-btn jf-btn-violet !py-2">Join</button>
+            <input className="pk-input !py-2 !text-sm" placeholder="you@email.pk" />
+            <button className="pk-btn pk-btn-green !py-2">Join</button>
           </form>
         </div>
       </div>
-      <div className="border-t border-[var(--color-border-subtle)]">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[var(--color-text-muted)]">© 2026 JobForge. All rights reserved.</p>
-          <div className="flex items-center gap-4 text-[var(--color-text-secondary)]">
-            <a href="#" aria-label="GitHub"><Github className="w-4 h-4" /></a>
-            <a href="#" aria-label="LinkedIn"><Linkedin className="w-4 h-4" /></a>
-            <a href="#" aria-label="Twitter"><Twitter className="w-4 h-4" /></a>
-          </div>
-        </div>
+      <div className="border-t border-[var(--color-border-light)]">
+        <p className="max-w-7xl mx-auto px-6 py-5 text-xs text-[var(--color-text-muted)] text-center">
+          © 2026 PakCareers. Independent portal — not affiliated with the Government of Pakistan.
+        </p>
       </div>
     </footer>
   );

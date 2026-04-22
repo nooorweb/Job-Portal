@@ -1,289 +1,178 @@
 "use client";
-
-import { useEffect, useMemo, useState } from "react";
-import { Search, MapPin, Sparkles, ArrowRight } from "lucide-react";
-import { motion } from "motion/react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { Search, Building2, Users, Award, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import JobCard from "@/components/JobCard";
-import JobCardSkeleton from "@/components/JobCardSkeleton";
-import { JOBS, CATEGORIES } from "@/constants/data";
-import { useLocalStorage } from "@/lib/storage";
-import { formatSalary } from "@/lib/format";
+import OrgCard from "@/components/OrgCard";
+import { ORGANIZATIONS, FILTERS, totalActivePosts } from "@/constants/data";
 
-const TRENDING = ["React", "UI/UX", "Python", "Data Science"];
-const SORTS = ["Latest", "Salary", "Relevance"] as const;
-const FILTERS = ["All", "Engineering", "Design", "Marketing", "Finance", "Remote", "Featured"] as const;
+const QUICK_CHIPS = ["FPSC", "KPPSC", "FIA", "Pak Army", "Police", "NTS"];
 
-function useDebounced<T>(value: T, delay = 300) {
-  const [v, setV] = useState(value);
-  useEffect(() => {
-    const t = setTimeout(() => setV(value), delay);
-    return () => clearTimeout(t);
-  }, [value, delay]);
-  return v;
-}
+export default function Home() {
+  const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
+  const [query, setQuery] = useState("");
 
-function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
-  const [n, setN] = useState(0);
-  useEffect(() => {
-    const start = performance.now();
-    const duration = 1200;
-    let raf = 0;
-    const tick = (now: number) => {
-      const p = Math.min(1, (now - start) / duration);
-      setN(Math.floor(to * (1 - Math.pow(1 - p, 3))));
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [to]);
-  return <span>{n.toLocaleString()}{suffix}</span>;
-}
-
-export default function HomePage() {
-  const [bookmarks, setBookmarks] = useLocalStorage<string[]>("jf-bookmarks", []);
-  const [searchInput, setSearchInput] = useState("");
-  const [category, setCategory] = useState<string>("All");
-  const [filter, setFilter] = useState<string>("All");
-  const [sortBy, setSortBy] = useState<(typeof SORTS)[number]>("Latest");
-  const [loading, setLoading] = useState(true);
-
-  const search = useDebounced(searchInput, 300);
-
-  useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 600);
-    return () => clearTimeout(t);
-  }, []);
-
-  const toggleBookmark = (id: string) =>
-    setBookmarks(bookmarks.includes(id) ? bookmarks.filter((b) => b !== id) : [...bookmarks, id]);
-
-  const jobs = useMemo(() => {
-    const q = search.toLowerCase().trim();
-    let out = JOBS.filter((j) => {
-      if (category !== "All" && j.category !== category) return false;
-      if (filter === "Remote" && !j.remote) return false;
-      else if (filter === "Featured" && !j.featured) return false;
-      else if (!["All", "Remote", "Featured"].includes(filter) && j.category !== filter) return false;
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return ORGANIZATIONS.filter((o) => {
+      if (filter !== "All" && o.type !== filter) return false;
       if (!q) return true;
       return (
-        j.title.toLowerCase().includes(q) ||
-        j.company.toLowerCase().includes(q) ||
-        j.skills.some((s) => s.toLowerCase().includes(q)) ||
-        j.category.toLowerCase().includes(q)
+        o.name.toLowerCase().includes(q) ||
+        o.shortName.toLowerCase().includes(q) ||
+        o.tags.some((t) => t.toLowerCase().includes(q)) ||
+        o.jobs.some((j) => j.postTitle.toLowerCase().includes(q) || j.bpsGrade.toLowerCase().includes(q))
       );
     });
-    if (sortBy === "Latest") out = [...out].sort((a, b) => +new Date(b.postedDate) - +new Date(a.postedDate));
-    else if (sortBy === "Salary") out = [...out].sort((a, b) => b.salaryMax - a.salaryMax);
-    else if (sortBy === "Relevance" && q) {
-      out = [...out].sort((a, b) => {
-        const score = (j: typeof a) =>
-          (j.title.toLowerCase().includes(q) ? 3 : 0) +
-          (j.skills.some((s) => s.toLowerCase().includes(q)) ? 2 : 0) +
-          (j.company.toLowerCase().includes(q) ? 1 : 0);
-        return score(b) - score(a);
-      });
-    }
-    return out;
-  }, [search, category, filter, sortBy]);
+  }, [filter, query]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      {/* Hero */}
+      {/* HERO */}
       <section className="relative overflow-hidden">
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 opacity-60"
-          style={{
-            background:
-              "radial-gradient(ellipse 60% 50% at 20% 10%, rgba(108,99,255,0.25), transparent 60%), radial-gradient(ellipse 40% 40% at 80% 30%, rgba(0,229,195,0.18), transparent 60%)",
-          }}
-        />
-        <div className="max-w-7xl mx-auto px-6 pt-12 pb-16 lg:pt-20 lg:pb-24 grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
-          <div className="lg:col-span-3">
-            <span className="jf-pill !text-xs mb-6 inline-flex">
-              <Sparkles className="w-3 h-3 text-[var(--color-accent-secondary)]" />
-              Now hiring across 32 countries
+        <div className="absolute inset-0 dot-grid opacity-60 pointer-events-none" />
+        <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-12 grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
+          <div>
+            <span className="pk-pill pk-pill-green mb-5">
+              🇵🇰 Now Hiring: {totalActivePosts.toLocaleString()}+ Govt Posts in 2026
             </span>
-            <h1 className="jf-display text-5xl md:text-6xl lg:text-7xl mb-6">
-              Find work that <br />
-              <span className="bg-gradient-to-r from-[var(--color-accent-primary)] to-[var(--color-accent-secondary)] bg-clip-text text-transparent">
-                matches your skills
-              </span>
+            <h1 className="font-extrabold text-5xl md:text-6xl leading-[1.05] text-[var(--color-text-heading)]">
+              Find Your <br className="hidden md:block" />
+              Government Job <br />
+              in <span className="text-[var(--color-accent-primary)]">Pakistan.</span>
             </h1>
-            <p className="text-lg text-[var(--color-text-secondary)] mb-8 max-w-xl">
-              Browse curated roles, study tailored learning paths, and prove your skills with role-specific quizzes.
+            <p className="mt-5 text-lg text-[var(--color-text-muted)] max-w-xl">
+              Browse FPSC, KPPSC, FIA, Pak Army, Police and more. Read post details, study syllabi, and prepare with practice quizzes — all in one place.
             </p>
 
             <form
               onSubmit={(e) => e.preventDefault()}
-              className="flex flex-col sm:flex-row items-stretch gap-2 bg-[var(--color-bg-secondary)] border border-[var(--color-border-subtle)] rounded-full p-2 shadow-[var(--shadow-card)] max-w-2xl"
+              className="mt-7 flex flex-col sm:flex-row gap-2 bg-white border border-[var(--color-border-light)] rounded-xl p-2 shadow-sm max-w-2xl"
             >
-              <div className="flex items-center flex-1 px-4 gap-3">
-                <Search className="w-4 h-4 text-[var(--color-text-muted)]" />
+              <div className="flex items-center flex-1 px-3">
+                <Search className="w-5 h-5 text-[var(--color-text-muted)]" />
                 <input
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  placeholder="Search job title, skill, or company..."
-                  className="bg-transparent flex-1 py-2 outline-none text-sm placeholder:text-[var(--color-text-muted)]"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search organization, post or BPS grade…"
+                  className="bg-transparent outline-none px-3 py-2 w-full text-sm"
                 />
               </div>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="bg-[var(--color-bg-elevated)] text-sm rounded-full px-4 py-2 border border-[var(--color-border-subtle)]"
-              >
-                {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-              <button type="submit" className="jf-btn jf-btn-primary !rounded-full">
+              <button type="submit" className="pk-btn pk-btn-primary !py-3 !px-5">
                 Search Jobs
               </button>
             </form>
 
-            <div className="mt-5 flex flex-wrap items-center gap-2">
-              <span className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider mr-1">Trending:</span>
-              {TRENDING.map((t) => (
+            <div className="mt-5 flex flex-wrap gap-2">
+              {QUICK_CHIPS.map((c) => (
+                <button key={c} onClick={() => setQuery(c)} className="pk-chip">{c}</button>
+              ))}
+            </div>
+          </div>
+
+          {/* Org logo mosaic */}
+          <div className="hidden lg:grid grid-cols-3 gap-4">
+            {ORGANIZATIONS.slice(0, 6).map((o, i) => (
+              <Link
+                key={o.slug}
+                href={`/organizations/${o.slug}`}
+                className={`pk-card pk-card-hoverable overflow-hidden ${i % 2 === 0 ? "translate-y-4" : ""}`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={o.coverImage} alt="" className="w-full h-24 object-cover" />
+                <div className="p-3 flex items-center gap-2">
+                  <span
+                    aria-hidden
+                    className="grid place-items-center w-8 h-8 rounded-md text-white font-bold text-[10px]"
+                    style={{ background: o.logoColor }}
+                  >
+                    {o.logoText.slice(0, 3)}
+                  </span>
+                  <span className="text-xs font-semibold truncate">{o.shortName}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="relative max-w-7xl mx-auto px-6 pb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { icon: Building2, label: "Active Posts", value: `${totalActivePosts.toLocaleString()}+` },
+              { icon: Users, label: "Organizations", value: `${ORGANIZATIONS.length}+` },
+              { icon: Award, label: "Successful Applicants", value: "12,000+" },
+            ].map((s) => (
+              <div key={s.label} className="pk-card p-5 flex items-center gap-4">
+                <span className="grid place-items-center w-12 h-12 rounded-xl bg-[var(--color-accent-light)] text-[var(--color-accent-primary)]">
+                  <s.icon className="w-5 h-5" />
+                </span>
+                <div>
+                  <div className="text-2xl font-bold text-[var(--color-text-heading)]">{s.value}</div>
+                  <div className="text-sm text-[var(--color-text-muted)]">{s.label}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ORGANIZATIONS */}
+      <section id="organizations" className="bg-[var(--color-bg-section)] py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-text-heading)]">Browse by Organization</h2>
+              <p className="text-[var(--color-text-muted)] mt-1">{filtered.length} organizations · {filtered.reduce((s, o) => s + o.jobs.length, 0)} active posts</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {FILTERS.map((f) => (
                 <button
-                  key={t}
-                  onClick={() => setSearchInput(t)}
-                  className="jf-pill jf-pill-mono hover:border-[var(--color-accent-primary)]"
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  className={`pk-chip ${filter === f ? "pk-chip-active" : ""}`}
                 >
-                  {t}
+                  {f}
                 </button>
               ))}
             </div>
+          </div>
 
-            <div className="mt-12 grid grid-cols-3 gap-6 max-w-lg">
-              {[
-                { n: 1200, s: "+", l: "Jobs" },
-                { n: 350, s: "+", l: "Companies" },
-                { n: 8900, s: "+", l: "Hires" },
-              ].map((s) => (
-                <div key={s.l}>
-                  <p className="jf-display text-3xl text-[var(--color-text-primary)]">
-                    <Counter to={s.n} suffix={s.s} />
-                  </p>
-                  <p className="text-xs text-[var(--color-text-secondary)] uppercase tracking-wider mt-1">{s.l}</p>
-                </div>
-              ))}
+          {filtered.length === 0 ? (
+            <div className="pk-card p-12 text-center">
+              <p className="text-[var(--color-text-muted)]">No organizations match your search.</p>
             </div>
-          </div>
-
-          {/* Floating job card visual */}
-          <div className="lg:col-span-2 hidden lg:block relative">
-            <div className="absolute -top-6 -right-6 w-40 h-40 rounded-full bg-[var(--color-accent-primary)]/20 blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-[var(--color-accent-secondary)]/15 blur-3xl" />
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="jf-card !p-6 relative"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--color-accent-primary)] to-[var(--color-accent-secondary)] grid place-items-center font-mono font-bold text-[#0A0A0F]">
-                    OL
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Orbital Labs</p>
-                    <p className="text-xs text-[var(--color-text-secondary)] flex items-center gap-1">
-                      <MapPin className="w-3 h-3" /> Berlin · Remote
-                    </p>
-                  </div>
-                </div>
-                <span className="relative inline-flex w-2 h-2 rounded-full text-[var(--color-success)] bg-[var(--color-success)] ping-dot" />
-              </div>
-              <h3 className="jf-display text-xl mb-3">Senior Frontend Developer</h3>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="jf-pill jf-pill-mono">React</span>
-                <span className="jf-pill jf-pill-mono">TypeScript</span>
-                <span className="jf-pill jf-pill-mono">Next.js</span>
-              </div>
-              <div className="flex items-center justify-between pt-4 border-t border-[var(--color-border-subtle)]">
-                <span className="text-[var(--color-accent-secondary)] font-semibold">{formatSalary(95000, 135000)}</span>
-                <span className="text-xs text-[var(--color-text-muted)]">3 days ago</span>
-              </div>
-            </motion.div>
-          </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map((o) => <OrgCard key={o.slug} org={o} />)}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Filter bar */}
-      <section id="categories" className="sticky top-[72px] z-30 bg-[var(--color-bg-primary)]/85 backdrop-blur-md border-y border-[var(--color-border-subtle)]">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-2 overflow-x-auto">
-          {FILTERS.map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`jf-chip ${filter === f ? "jf-chip-active" : ""}`}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* Job grid */}
-      <section id="jobs" className="max-w-7xl mx-auto px-6 py-12">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-          <div>
-            <h2 className="jf-display text-3xl mb-1">Open Roles</h2>
-            <p className="text-sm text-[var(--color-text-secondary)]">
-              Showing {jobs.length} job{jobs.length === 1 ? "" : "s"}
-            </p>
-          </div>
-          <label className="flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
-            Sort by
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as (typeof SORTS)[number])}
-              className="bg-[var(--color-bg-elevated)] text-sm rounded-lg px-3 py-2 border border-[var(--color-border-subtle)] text-[var(--color-text-primary)]"
-            >
-              {SORTS.map((s) => <option key={s} value={s}>{s}</option>)}
-            </select>
-          </label>
-        </div>
-
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => <JobCardSkeleton key={i} />)}
-          </div>
-        ) : jobs.length === 0 ? (
-          <div className="jf-card !p-12 text-center">
-            <p className="jf-display text-2xl mb-2">No jobs match your filters</p>
-            <p className="text-[var(--color-text-secondary)]">Try a different category or clear your search.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {jobs.map((j, i) => (
-              <JobCard key={j.id} job={j} index={i} bookmarked={bookmarks.includes(j.id)} onBookmark={toggleBookmark} />
+      {/* HOW IT WORKS */}
+      <section id="learn" className="py-20">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-text-heading)]">How PakCareers Works</h2>
+          <p className="text-[var(--color-text-muted)] mt-2">Three steps from discovery to application.</p>
+          <div className="grid md:grid-cols-3 gap-6 mt-10 text-left">
+            {[
+              { n: "01", t: "Pick an Organization", d: "Browse FPSC, KPPSC, FIA, Pak Army and more — filter by type or province." },
+              { n: "02", t: "Open a Post", d: "See BPS grade, seats, eligibility, important dates and the full syllabus." },
+              { n: "03", t: "Prepare & Apply", d: "Take the practice quiz, then apply directly on the official portal." },
+            ].map((s) => (
+              <div key={s.n} className="pk-card p-6">
+                <span className="text-sm font-bold text-[var(--color-accent-primary)]">{s.n}</span>
+                <h3 className="text-xl font-semibold mt-2 text-[var(--color-text-heading)]">{s.t}</h3>
+                <p className="text-sm text-[var(--color-text-muted)] mt-2">{s.d}</p>
+                <ChevronRight className="w-5 h-5 text-[var(--color-accent-primary)] mt-4" />
+              </div>
             ))}
           </div>
-        )}
-
-        <div className="flex justify-center mt-12">
-          <button className="jf-btn jf-btn-ghost">
-            Load More Jobs <ArrowRight className="w-4 h-4" />
-          </button>
         </div>
-      </section>
-
-      <section id="how" className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-3 gap-6">
-        {[
-          { t: "Browse", d: "Explore roles tailored to your skills and stage.", n: "01" },
-          { t: "Study", d: "Follow a guided syllabus crafted for the role.", n: "02" },
-          { t: "Prove", d: "Take a quiz and stand out to employers.", n: "03" },
-        ].map((s) => (
-          <div key={s.t} className="jf-card !p-8">
-            <p className="jf-pill jf-pill-mono mb-6 inline-flex">{s.n}</p>
-            <h3 className="jf-display text-2xl mb-2">{s.t}</h3>
-            <p className="text-sm text-[var(--color-text-secondary)]">{s.d}</p>
-          </div>
-        ))}
       </section>
 
       <Footer />

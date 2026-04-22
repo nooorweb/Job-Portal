@@ -11,30 +11,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/jobs/[id]/layout": [
+    "/organizations/[slug]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/jobs/[id]/layout.js"
+      "static/chunks/app/organizations/[slug]/page.js"
     ],
-    "/jobs/[id]/not-found": [
+    "/organizations/[slug]/[jobSlug]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/jobs/[id]/not-found.js"
-    ],
-    "/jobs/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/jobs/[id]/page.js"
-    ],
-    "/jobs/[id]/syllabus/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/jobs/[id]/syllabus/page.js"
-    ],
-    "/jobs/[id]/quiz/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/jobs/[id]/quiz/page.js"
+      "static/chunks/app/organizations/[slug]/[jobSlug]/page.js"
     ]
   }
 }

@@ -30,8 +30,12 @@
 html, body {
   background-color: var(--color-bg-page);
   color: var(--color-text-body);
-  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Ensure all elements inherit Poppins — prevents Tailwind reset from applying system fonts on inputs/buttons */
+*, *::before, *::after {
+  font-family: inherit;
 }
 
 ::selection {

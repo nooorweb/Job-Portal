@@ -30,7 +30,8 @@
     "noEmit": true,
     "allowJs": true,
     "strict": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",

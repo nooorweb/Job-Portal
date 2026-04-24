@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Award, Clock, CheckCircle2, XCircle, ArrowRight, RotateCcw, ExternalLink } from "lucide-react";
-import type { Job, Question } from "@/constants/data";
+import type { Job, Question } from "@/constants";
 import { useLocalStorage } from "@/lib/storage";
 
 type Phase = "intro" | "quiz" | "result";
@@ -307,3 +307,4 @@ function Result({ job, stored, onRetake, onApply }: { job: Job; stored: Stored; 
     </div>
   );
 }
+

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { BookOpen, ChevronDown, CheckCircle2, ArrowRight } from "lucide-react";
-import type { Job } from "@/constants/data";
+import type { Job } from "@/constants";
 
 const ICONS = ["📖", "📝", "🧮", "🔬", "🌍", "💡"];
 
@@ -86,3 +86,4 @@ export default function SyllabusTab({ job, onStartQuiz }: { job: Job; onStartQui
     </div>
   );
 }
+

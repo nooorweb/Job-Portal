@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { LEARN_GUIDES } from "@/constants/data";
+import { LEARN_GUIDES } from "@/constants";
 
 export default function LearnPage() {
   return (
@@ -33,3 +33,4 @@ export default function LearnPage() {
     </div>
   );
 }
+

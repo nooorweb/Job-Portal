@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getGuide, LEARN_GUIDES } from "@/constants/data";
+import { getGuide, LEARN_GUIDES } from "@/constants";
 
 export function generateStaticParams() {
   return LEARN_GUIDES.map((guide) => ({ slug: guide.slug }));

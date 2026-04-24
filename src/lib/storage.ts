@@ -22,3 +22,4 @@ export function useLocalStorage<T>(key: string, initial: T) {
 
   return [value, setValue, hydrated] as const;
 }
+

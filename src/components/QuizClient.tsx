@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Award, CheckCircle2, Clock, ExternalLink, RotateCcw, XCircle } from "lucide-react";
-import type { Job } from "@/constants/data";
+import type { Job } from "@/constants";
 import { useLocalStorage } from "@/lib/storage";
 
 type Phase = "intro" | "quiz" | "result";
@@ -297,3 +297,4 @@ export default function QuizClient({ orgSlug, job }: { orgSlug: string; job: Job
     </div>
   );
 }
+

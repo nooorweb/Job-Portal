@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ChevronRight, ExternalLink, Share2 } from "lucide-react";
-import type { Job, Organization } from "@/constants/data";
+import type { Job, Organization } from "@/constants";
 import { daysUntil, formatDate } from "@/lib/format";
 
 export default function JobHeader({ org, job }: { org: Organization; job: Job }) {
@@ -54,3 +54,4 @@ export default function JobHeader({ org, job }: { org: Organization; job: Job })
     </div>
   );
 }
+

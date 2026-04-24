@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import OrgCard from "@/components/OrgCard";
-import { ORGANIZATIONS } from "@/constants/data";
+import { ORGANIZATIONS } from "@/constants";
 
 export default function OrganizationsPage() {
   return (
@@ -25,3 +25,4 @@ export default function OrganizationsPage() {
     </div>
   );
 }
+

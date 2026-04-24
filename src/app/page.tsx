@@ -6,7 +6,7 @@ import { Search, Building2, Users, Award, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import OrgCard from "@/components/OrgCard";
-import { FILTERS, ORGANIZATIONS, totalActivePosts } from "@/constants/data";
+import { FILTERS, ORGANIZATIONS, totalActivePosts } from "@/constants";
 import { HERO_MOSAIC } from "@/data/images";
 
 const QUICK_CHIPS = ["FPSC", "KPPSC", "FIA", "Pak Army", "Police", "NTS"];
@@ -170,3 +170,4 @@ export default function Home() {
     </div>
   );
 }
+

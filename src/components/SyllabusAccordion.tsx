@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CheckCircle2, ChevronDown } from "lucide-react";
-import type { Subject } from "@/constants/data";
+import type { Subject } from "@/constants";
 
 const ICONS = ["Read", "Write", "Logic", "Science", "World", "Ideas"];
 
@@ -47,3 +47,4 @@ export default function SyllabusAccordion({ subject, index }: { subject: Subject
     </div>
   );
 }
+

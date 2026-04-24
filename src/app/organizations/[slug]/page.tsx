@@ -4,7 +4,7 @@ import { Calendar, ChevronRight, Globe, MapPin, Shield, Star } from "lucide-reac
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PostCard from "@/components/PostCard";
-import { getOrganization, ORGANIZATIONS } from "@/constants/data";
+import { getOrganization, ORGANIZATIONS } from "@/constants";
 import { formatMonth } from "@/lib/format";
 
 export function generateStaticParams() {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, CalendarDays, GraduationCap, UserRound, Users } from "lucide-react";
-import type { Job } from "@/constants/data";
+import type { Job } from "@/constants";
 import { daysUntil, formatDate } from "@/lib/format";
 
 const STATUS = {
@@ -74,3 +74,4 @@ export default function PostCard({ orgSlug, job }: { orgSlug: string; job: Job }
     </article>
   );
 }
+

@@ -1,5 +1,5 @@
 import { CheckCircle2, Calendar, FileText, Download, ExternalLink } from "lucide-react";
-import type { Job, Organization } from "@/constants/data";
+import type { Job, Organization } from "@/constants";
 import { formatDate } from "@/lib/format";
 
 export default function OverviewTab({ org, job }: { org: Organization; job: Job }) {
@@ -100,3 +100,4 @@ export default function OverviewTab({ org, job }: { org: Organization; job: Job 
     </div>
   );
 }
+

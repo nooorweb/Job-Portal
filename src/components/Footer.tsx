@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ORGANIZATIONS } from "@/constants/data";
+import { ORGANIZATIONS } from "@/constants";
 
 export default function Footer() {
   return (
@@ -52,3 +52,4 @@ export default function Footer() {
     </footer>
   );
 }
+

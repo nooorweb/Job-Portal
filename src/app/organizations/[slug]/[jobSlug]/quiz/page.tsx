@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import JobHeader from "@/components/JobHeader";
 import QuizClient from "@/components/QuizClient";
 import TabBar from "@/components/TabBar";
-import { getJob, getOrganization, ORGANIZATIONS } from "@/constants/data";
+import { getJob, getOrganization, ORGANIZATIONS } from "@/constants";
 
 export function generateStaticParams() {
   return ORGANIZATIONS.flatMap((org) => org.jobs.map((job) => ({ slug: org.slug, jobSlug: job.slug })));

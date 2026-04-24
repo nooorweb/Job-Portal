@@ -10,3 +10,4 @@ export default function DeadlineChip({ deadline }: { deadline: string }) {
     </span>
   );
 }
+

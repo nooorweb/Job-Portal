@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ChevronRight, Download, ExternalLink, Share2 } from "lucide-react";
-import type { Job, Organization } from "@/constants/data";
+import type { Job, Organization } from "@/constants";
 import { formatDate, daysUntil } from "@/lib/format";
 import OverviewTab from "./tabs/OverviewTab";
 import SyllabusTab from "./tabs/SyllabusTab";
@@ -100,3 +100,4 @@ export default function PostShell({ org, job }: { org: Organization; job: Job })
     </div>
   );
 }
+

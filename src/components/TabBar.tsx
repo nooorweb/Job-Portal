@@ -37,3 +37,4 @@ export default function TabBar({ basePath }: { basePath: string }) {
     </div>
   );
 }
+

@@ -1,5 +1,5 @@
 import { ExternalLink, FileCheck2, FileText, AlertCircle } from "lucide-react";
-import type { Job } from "@/constants/data";
+import type { Job } from "@/constants";
 import { formatDate } from "@/lib/format";
 
 export default function ApplyTab({ job }: { job: Job }) {
@@ -37,3 +37,4 @@ export default function ApplyTab({ job }: { job: Job }) {
     </div>
   );
 }
+

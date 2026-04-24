@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, Bookmark } from "lucide-react";
-import type { Organization } from "@/constants/data";
+import type { Organization } from "@/constants";
 import { formatMonth } from "@/lib/format";
 import { useLocalStorage } from "@/lib/storage";
 
@@ -68,3 +68,4 @@ export default function OrgCard({ org }: { org: Organization }) {
     </article>
   );
 }
+

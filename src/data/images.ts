@@ -65,3 +65,4 @@ export const HERO_MOSAIC = [
     label: "Quetta",
   },
 ] as const;
+

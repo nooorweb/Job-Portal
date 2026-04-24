@@ -114,10 +114,10 @@ import { Poppins } from "next/font/google";
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
-  display: "swap",  // Best for web
+  display: "swap",
   weight: ["400", "500", "600", "700", "800"],
 });
-```
+
 
 ### Build Scripts (Vercel-Optimized)
 ```json

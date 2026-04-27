@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import JsonLd from "@/components/JsonLd";
+import { Article } from "@/types/schema";
 import { getGuide, LEARN_GUIDES } from "@/constants";
 
 export function generateStaticParams() {
@@ -12,8 +14,23 @@ export default async function LearnDetailPage({ params }: { params: Promise<{ sl
   const guide = getGuide(slug);
   if (!guide) notFound();
 
+  const articleSchema: Article = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": guide.title,
+    "description": guide.excerpt,
+    "dateModified": guide.updatedAt,
+    "author": [
+      {
+        "@type": "Organization",
+        "name": "PakCareers",
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
+      <JsonLd schema={articleSchema} />
       <Navbar />
       <main className="max-w-4xl mx-auto px-6 py-12 w-full">
         <article className="pk-card p-8 md:p-10">

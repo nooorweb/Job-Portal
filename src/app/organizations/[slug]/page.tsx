@@ -6,6 +6,48 @@ import Footer from "@/components/Footer";
 import PostCard from "@/components/PostCard";
 import { getOrganization, ORGANIZATIONS } from "@/constants";
 import { formatMonth } from "@/lib/format";
+import type { Metadata, ResolvingMetadata } from "next";
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { slug } = await params;
+  const org = getOrganization(slug);
+
+  if (!org) {
+    return {
+      title: "Organization Not Found",
+      description: "The requested organization could not be found on PakCareers.",
+    };
+  }
+
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `${org.name} (${org.shortName})`,
+    description: org.description.slice(0, 160) + "...",
+    openGraph: {
+      title: `${org.shortName} - Careers & Recruitment`,
+      description: `Apply for the latest jobs at ${org.name}. Browse active postings and exam details.`,
+      url: `https://pakcareers.pk/organizations/${slug}`,
+      images: [
+        {
+          url: `/api/og?title=${encodeURIComponent(org.shortName)}`,
+          width: 1200,
+          height: 630,
+        },
+        ...previousImages,
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${org.shortName} Jobs & Career Portal`,
+      description: `Latest recruitment notices for ${org.name}.`,
+      images: [`/api/og?title=${encodeURIComponent(org.shortName)}`],
+    },
+  };
+}
 
 export function generateStaticParams() {
   return ORGANIZATIONS.map((org) => ({ slug: org.slug }));

@@ -21,10 +21,12 @@ export default async function JobOverviewPage({ params }: { params: Promise<{ sl
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <JobHeader org={org} job={job} />
-      <TabBar basePath={basePath} />
-      <main className="max-w-7xl mx-auto px-6 py-8 w-full">
-        <OverviewTab org={org} job={job} />
+      <main>
+        <JobHeader org={org} job={job} />
+        <TabBar basePath={basePath} />
+        <div className="max-w-7xl mx-auto px-6 py-8 w-full">
+          <OverviewTab org={org} job={job} />
+        </div>
       </main>
       <Footer />
     </div>

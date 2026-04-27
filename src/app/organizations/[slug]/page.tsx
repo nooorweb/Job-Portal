@@ -46,6 +46,9 @@ export async function generateMetadata(
       description: `Latest recruitment notices for ${org.name}.`,
       images: [`/api/og?title=${encodeURIComponent(org.shortName)}`],
     },
+    alternates: {
+      canonical: `/organizations/${slug}`,
+    },
   };
 }
 

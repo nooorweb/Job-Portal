@@ -5,6 +5,22 @@ import JsonLd from "@/components/JsonLd";
 import { Article } from "@/types/schema";
 import { getGuide, LEARN_GUIDES } from "@/constants";
 
+import { Metadata } from "next";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const guide = getGuide(slug);
+  if (!guide) return {};
+
+  return {
+    title: guide.title,
+    description: guide.excerpt,
+    alternates: {
+      canonical: `/learn/${slug}`,
+    },
+  };
+}
+
 export function generateStaticParams() {
   return LEARN_GUIDES.map((guide) => ({ slug: guide.slug }));
 }
